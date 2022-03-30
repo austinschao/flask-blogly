@@ -6,7 +6,8 @@
   <h1>Users</h1>
     <ol>
       {% for user in users %}
-        <li>{{user}}</li>
+        <li><a href="/users/{{user.id}}">{{user.first_name}} {{user.last_name}}</a></li>
+      <!-- need to create an anchor tag for the user_ids -->
       {% endfor %}
     </ol>
 
