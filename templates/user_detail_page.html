@@ -1,17 +1,18 @@
-{% extends 'base.html' %}
-
-{% block title %} User Detail Page {% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %} User Detail Page {% endblock %} {%
+block content %}
 <div>
   <div>
-    <img src="{{url}}" alt="User Profile Picture">
+    <img src="{{curr_user.image_url}}" alt="User Profile Picture" />
   </div>
   <div>
     <h2>{{curr_user.first_name}} {{curr_user.last_name}}</h2>
     <div>
-      <button>Edit</button>
-      <button>Delete</button>
+      <form action="/users/{{curr_user.id}}/edit">
+        <button>Edit</button>
+      </form>
+      <form action="users/{{curr_user.id}}/delete/" method="POST">
+        <button type="submit">Delete</button>
+      </form>
     </div>
   </div>
 </div>

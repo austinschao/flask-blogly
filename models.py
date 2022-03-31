@@ -32,3 +32,5 @@ class User(db.Model):
     image_url = db.Column(db.Text,
                             nullable = True)
 
+
+
