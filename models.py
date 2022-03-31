@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+import datetime
+
 
 db = SQLAlchemy()
 
@@ -19,6 +21,8 @@ class User(db.Model):
 
     __tablename__ = 'users'
 
+    posts = db.relationship('Post', backref = 'user')
+
     id = db.Column(db.Integer,
                     primary_key = True,
                     autoincrement = True)
@@ -30,7 +34,28 @@ class User(db.Model):
                             nullable = False)
 
     image_url = db.Column(db.Text,
-                            nullable = False, default = DEFAULT_IMG_URL)
+                            nullable = True, default = DEFAULT_IMG_URL)
 
 
+class Post(db.Model):
+    """ Creating a Post """
+
+    __table__name = 'posts'
+
+    id = db.Column(db.Integer,
+                    primary_key = True,
+                    autoincrement = True)
+
+    title = db.Column(db.String(50),
+                        nullable = False)
+
+    content = db.Column(db.Text,
+                        nullable = False)
+
+    created_at = db.Column(db.DateTime(timezone = True),
+                        default = datetime.datetime.utcnow,
+                        nullable = False)
+
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'))
 

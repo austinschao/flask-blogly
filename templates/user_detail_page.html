@@ -15,5 +15,16 @@ block content %}
       </form>
     </div>
   </div>
+  <div>
+    <h2>Posts</h2>
+    <ol>
+      {% for post in posts %}
+      <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+      {% endfor %}
+    </ol>
+    <form action="/users/{{curr_user.id}}/posts/new">
+      <button>Add Post</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app, db
-from models import User, DEFAULT_IMG_URL
+from models import User, Post, DEFAULT_IMG_URL
 
 # Let's configure our app to use a different database for tests
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///blogly_test"
@@ -110,8 +110,3 @@ class UserViewTestCase(TestCase):
             self.assertIn("was successfully deleted.", html)
 
     # test removing image and see if default image loads
-
-
-
-
-

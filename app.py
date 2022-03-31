@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, render_template, redirect, request, flash
-from models import db, connect_db, User, DEFAULT_IMG_URL
+from models import db, connect_db, User, Post, DEFAULT_IMG_URL
 from flask_debugtoolbar import DebugToolbarExtension
 
 
@@ -58,10 +58,11 @@ def display_user_page(user_id):
     """ Display a given user's page """
 
     curr_user = User.query.get_or_404(user_id)
+    posts = curr_user.posts
 
-    # Need 404 error page if user doesn't exist
 
-    return render_template('user_detail_page.html', curr_user = curr_user)
+
+    return render_template('user_detail_page.html', curr_user = curr_user, posts = posts)
 
 @app.post('/users/<int:user_id>/delete/')
 def delete_user(user_id):
@@ -100,6 +101,36 @@ def update_user_profile(user_id):
     return redirect('/users')
 
 
+@app.get('/users/<int:user_id>/posts/new')
+def display_post_form(user_id):
+    """ Display post form """
 
+    curr_user = User.query.get(user_id)
 
+    return render_template('add_post.html', curr_user = curr_user)
 
+@app.post('/users/<int:user_id>/posts/new')
+def add_post(user_id):
+    """ Add new post """
+
+    response = request.form
+    title = response['title']
+    content = response['content']
+
+    new_post = Post(title = title, content = content)
+
+    db.session.add(new_post)
+    db.session.commit()
+
+    return redirect(f"/users/{user_id}")
+
+# response = request.form
+#     image_url = response['image_url'] or None
+
+#     new_user = User(first_name = response['first_name'], last_name = response['last_name'],
+#         image_url = image_url)
+
+#     db.session.add(new_user)
+#     db.session.commit()
+
+#     return redirect('/users')
