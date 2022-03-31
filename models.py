@@ -1,6 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 
-
 db = SQLAlchemy()
 
 DEFAULT_IMG_URL = '/static/img/dog.jpeg'
@@ -31,7 +30,7 @@ class User(db.Model):
                             nullable = False)
 
     image_url = db.Column(db.Text,
-                            nullable = True, default = DEFAULT_IMG_URL)
+                            nullable = False, default = DEFAULT_IMG_URL)
 
 
 

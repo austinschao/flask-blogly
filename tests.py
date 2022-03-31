@@ -97,8 +97,21 @@ class UserViewTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('new_test_name', html)
-
-
-
+            # can check if old name isnt there assertNotIn
 # Different assert checks?!?!?!
+
+    def test_delete_user(self):
+        with self.client as c:
+            resp = c.post(f"/users/{self.user_id}/delete", follow_redirects = True)
+
+            html = resp.get_data(as_text = True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("was successfully deleted.", html)
+
+    # test removing image and see if default image loads
+
+
+
+
 
