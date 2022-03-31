@@ -40,7 +40,7 @@ class User(db.Model):
 class Post(db.Model):
     """ Creating a Post """
 
-    __table__name = 'posts'
+    __tablename__ = 'posts'
 
     id = db.Column(db.Integer,
                     primary_key = True,

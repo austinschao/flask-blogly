@@ -1,24 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title %} Add a Post {% endblock %} {% block
+content %}
 
-{% block title %} Add a Post {% endblock %}
-
-{% block content %}
-  <div>
-    <h1>Add a Post for {{curr_user.first_name}} {{curr_user.last_name}}</h1>
-    <form action="/users/{{curr_user.id}}/posts/new" method = "POST">
-      <div>
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title">
-      </div>
-      <div>
-        <label for="content">Content</label>
-        <textarea name="content" id="content" cols="30" rows="10"></textarea>
-
-      </div>
-      <button>Add</button>
-    </form>
-      <form action="/users/{{curr_user.id}}">
-        <button>Cancel</button>
-      </form>
-  </div>
+<!-- Create a new post -->
+<div>
+  <h1>Add a Post for {{curr_user.first_name}} {{curr_user.last_name}}</h1>
+  <form action="/users/{{curr_user.id}}/posts/new" method="POST">
+    <div>
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" />
+    </div>
+    <div>
+      <label for="content">Content</label>
+      <textarea name="content" id="content" cols="30" rows="10"></textarea>
+    </div>
+    <button>Add</button>
+  </form>
+  <form action="/users/{{curr_user.id}}">
+    <button>Cancel</button>
+  </form>
+</div>
 {% endblock %}

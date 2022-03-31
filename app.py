@@ -79,7 +79,7 @@ def delete_user(user_id):
 def display_edit_page(user_id):
     """ Display edit page """
 
-    curr_user = User.query.get(user_id)
+    curr_user = User.query.get_or_404(user_id)
     return render_template('user_edit_page.html', curr_user = curr_user)
 
 @app.post('/users/<int:user_id>/edit')
@@ -88,7 +88,7 @@ def update_user_profile(user_id):
 
     response = request.form
 
-    curr_user = User.query.get(user_id)
+    curr_user = User.query.get_or_404(user_id)
     image_url = response['image_url'] or DEFAULT_IMG_URL
     if response['first_name']:
         curr_user.first_name = response['first_name']
@@ -117,20 +117,56 @@ def add_post(user_id):
     title = response['title']
     content = response['content']
 
-    new_post = Post(title = title, content = content)
+    new_post = Post(title = title, content = content, user_id = user_id)
 
     db.session.add(new_post)
     db.session.commit()
 
     return redirect(f"/users/{user_id}")
 
-# response = request.form
-#     image_url = response['image_url'] or None
+@app.get('/posts/<int:post_id>')
+def show_post(post_id):
+    """Displays the user post that was clicked on"""
 
-#     new_user = User(first_name = response['first_name'], last_name = response['last_name'],
-#         image_url = image_url)
+    post = Post.query.get_or_404(post_id)
+    curr_user = post.user
 
-#     db.session.add(new_user)
-#     db.session.commit()
+    return render_template('post_detail_page.html', post=post, curr_user=curr_user)
 
-#     return redirect('/users')
+@app.get('/posts/<int:post_id>/edit')
+def show_edit_form(post_id):
+    """Displays form to edit a selected post"""
+
+    post = Post.query.get_or_404(post_id)
+
+    return render_template('post_edit_page.html', post = post)
+
+@app.post('/posts/<int:post_id>/edit')
+def edit_post(post_id):
+    """"Handle post edit"""
+
+    response = request.form
+    title = response["title"]
+    content = response["content"]
+
+    post = Post.query.get_or_404(post_id)
+    post.title = title
+    post.content = content
+
+    db.session.commit()
+
+    return redirect(f'/posts/{post_id}')
+
+@app.post('/posts/<int:post_id>/delete')
+def delete_post(post_id):
+    """Deletes the selected post"""
+
+    post = Post.query.get_or_404(post_id)
+    Post.query.filter_by(id = post_id).delete()
+    user = post.user
+
+    db.session.commit()
+
+    flash("Message successfully deleted!")
+    return redirect(f'/users/{user.id}')
+

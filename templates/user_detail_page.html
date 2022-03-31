@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% block title %} User Detail Page {% endblock %} {%
 block content %}
+<!-- User Detail Page -->
 <div>
   <div>
     <img src="{{curr_user.image_url}}" alt="User Profile Picture" />
@@ -17,6 +18,9 @@ block content %}
   </div>
   <div>
     <h2>Posts</h2>
+    {% for msg in get_flashed_messages() %}
+    <p>{{msg}}</p>
+    {% endfor %}
     <ol>
       {% for post in posts %}
       <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
