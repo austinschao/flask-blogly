@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app, db
-from models import DEFAULT_IMAGE_URL, User
+from models import User, DEFAULT_IMG_URL
 
 # Let's configure our app to use a different database for tests
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///blogly_test"
@@ -47,9 +47,11 @@ class UserViewTestCase(TestCase):
         # value of their id, since it will change each time our tests are run.
         self.user_id = test_user.id
 
+
     def tearDown(self):
         """Clean up any fouled transaction."""
         db.session.rollback()
+
 
     def test_list_users(self):
         with self.client as c:
@@ -58,3 +60,45 @@ class UserViewTestCase(TestCase):
             html = resp.get_data(as_text=True)
             self.assertIn("test_first", html)
             self.assertIn("test_last", html)
+
+
+    def test_display_user_listing(self):
+        with self.client as c:
+            resp = c.get('/', follow_redirects = True)
+            html = resp.get_data(as_text = True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<!-- Display Users -->', html)
+
+
+    def test_create_new_user(self):
+        with self.client as c:
+            resp = c.post('/users/new', follow_redirects = True,
+                data =
+                {'first_name': 'test_test',
+                'last_name': 'test_test',
+                'image_url': DEFAULT_IMG_URL})
+
+            html = resp.get_data(as_text = True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('test_test', html)
+
+
+    def test_update_user_profile(self):
+        with self.client as c:
+            resp = c.post(f"/users/{self.user_id}/edit", follow_redirects = True,
+                data =
+                {'first_name': 'new_test_name',
+                'last_name': 'new_test_name',
+                'image_url': DEFAULT_IMG_URL})
+
+            html = resp.get_data(as_text = True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('new_test_name', html)
+
+
+
+# Different assert checks?!?!?!
+

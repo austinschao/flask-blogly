@@ -3,13 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+DEFAULT_IMG_URL = '/static/img/dog.jpeg'
+
 
 def connect_db(app):
     """ Connect to database """
 
     db.app = app
     db.init_app(app)
-
 
 
 """Models for Blogly."""

@@ -1,12 +1,12 @@
 {% extends 'base.html' %} {% block title %} User Listing {% endblock %} {% block
 content %}
+<!-- Display Users -->
 <h1>Users</h1>
 <ol>
   {% for user in users %}
   <li>
     <a href="/users/{{user.id}}">{{user.first_name}} {{user.last_name}}</a>
   </li>
-  <!-- need to create an anchor tag for the user_ids -->
   {% endfor %}
 </ol>
 
