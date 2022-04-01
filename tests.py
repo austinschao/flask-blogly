@@ -135,16 +135,23 @@ class PostViewTestCase(TestCase):
                                     last_name="test_last",
                                     image_url=None)
 
-        first_test_post = Post(title="test_title1", content="test_content", user_id = test_user.id)
 
         second_user = User(first_name="test_first_two", last_name="test_last_two",
                            image_url=None)
 
+
+
+        db.session.add(test_user)
+        db.session.add(second_user)
+        db.session.commit()
+
+
+        first_test_post = Post(title="test_title1", content="test_content", user_id = test_user.id)
         second_test_post = Post(title="test_title2", content="test_content", user_id = second_user.id)
 
 
-        db.session.add_all([test_user, second_user])
-        db.session.add_all([first_test_post, second_test_post])
+        db.session.add(first_test_post)
+        db.session.add(second_test_post)
         db.session.commit()
 
         # We can hold onto our test_user's id by attaching it to self (which is
@@ -159,15 +166,15 @@ class PostViewTestCase(TestCase):
         """Clean up any fouled transaction."""
         db.session.rollback()
 
+
     def test_display_post_form(self):
         with self.client as c:
-            resp = c.get(f'/users/{self.user_id}/posts/new', follow_redirects = True)
+            resp = c.get(f'/users/{self.user_id}/posts/new')
             html = resp.get_data(as_text = True)
-
-            breakpoint()
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<!-- Create a new post -->', html)
+
 
     def test_handle_add_form(self):
         with self.client as c:
@@ -178,9 +185,26 @@ class PostViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('test_title', html)
 
+
+    def test_edit_post(self):
+        with self.client as c:
+
+            resp = c.post(f'/posts/{self.post_id}/edit', follow_redirects = True,
+            data = {
+                'title': 'new test title',
+                'content': 'new test content'
+            })
+
+            html = resp.get_data(as_text = True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('new test title', html)
+            self.assertNotIn('test_title1', html)
+
     def test_delete_post(self):
         with self.client as c:
-            resp = c.post(f'/posts/{self.post_id}/delete', follow_redirects = True)
+            resp = c.post(f'/posts/{self.post_id}/delete',
+            follow_redirects = True)
 
             html = resp.get_data(as_text = True)
 

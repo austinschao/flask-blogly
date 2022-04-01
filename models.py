@@ -59,3 +59,23 @@ class Post(db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
 
+
+# class Tag(db.Model):
+#     """ Creating a tag """
+
+#     __tablename__ = 'tags'
+
+#     id = db.Column(db.Integer,
+#                     primary_key = True,
+#                     autoincrement = True)
+
+#     name = db.Column(db.String(50),
+#                         nullable = False)
+
+# class PostTag(db.Model):
+#     """ Join Table for Post and Tag """
+
+#     __tablename__ = 'posts_tags'
+
+#     post_id = (db.Integer,
+#                 db.ForeignKey)
